@@ -13,6 +13,9 @@
 		D0F3B1F51D421907008E5169 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0F3B1F31D421907008E5169 /* Main.storyboard */; };
 		D0F3B1F71D421907008E5169 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0F3B1F61D421907008E5169 /* Assets.xcassets */; };
 		D0F3B1FA1D421907008E5169 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0F3B1F81D421907008E5169 /* LaunchScreen.storyboard */; };
+		D0F3B2021D421A53008E5169 /* HTML.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0F3B2011D421A53008E5169 /* HTML.plist */; };
+		D0F3B2051D4224D7008E5169 /* HIMainController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F3B2041D4224D7008E5169 /* HIMainController.m */; };
+		D0F3B2081D424359008E5169 /* HISizeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F3B2071D424359008E5169 /* HISizeModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,11 @@
 		D0F3B1F61D421907008E5169 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0F3B1F91D421907008E5169 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D0F3B1FB1D421907008E5169 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D0F3B2011D421A53008E5169 /* HTML.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HTML.plist; sourceTree = "<group>"; };
+		D0F3B2031D4224D7008E5169 /* HIMainController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HIMainController.h; sourceTree = "<group>"; };
+		D0F3B2041D4224D7008E5169 /* HIMainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HIMainController.m; sourceTree = "<group>"; };
+		D0F3B2061D424359008E5169 /* HISizeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HISizeModel.h; sourceTree = "<group>"; };
+		D0F3B2071D424359008E5169 /* HISizeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HISizeModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +68,13 @@
 			children = (
 				D0F3B1ED1D421907008E5169 /* AppDelegate.h */,
 				D0F3B1EE1D421907008E5169 /* AppDelegate.m */,
+				D0F3B2031D4224D7008E5169 /* HIMainController.h */,
+				D0F3B2041D4224D7008E5169 /* HIMainController.m */,
 				D0F3B1F01D421907008E5169 /* ViewController.h */,
 				D0F3B1F11D421907008E5169 /* ViewController.m */,
+				D0F3B2061D424359008E5169 /* HISizeModel.h */,
+				D0F3B2071D424359008E5169 /* HISizeModel.m */,
+				D0F3B2011D421A53008E5169 /* HTML.plist */,
 				D0F3B1F31D421907008E5169 /* Main.storyboard */,
 				D0F3B1F61D421907008E5169 /* Assets.xcassets */,
 				D0F3B1F81D421907008E5169 /* LaunchScreen.storyboard */,
@@ -105,6 +118,7 @@
 		D0F3B1DF1D421906008E5169 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = HI;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "风聆小镇工作室";
 				TargetAttributes = {
@@ -137,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0F3B1FA1D421907008E5169 /* LaunchScreen.storyboard in Resources */,
+				D0F3B2021D421A53008E5169 /* HTML.plist in Resources */,
 				D0F3B1F71D421907008E5169 /* Assets.xcassets in Resources */,
 				D0F3B1F51D421907008E5169 /* Main.storyboard in Resources */,
 			);
@@ -151,7 +166,9 @@
 			files = (
 				D0F3B1F21D421907008E5169 /* ViewController.m in Sources */,
 				D0F3B1EF1D421907008E5169 /* AppDelegate.m in Sources */,
+				D0F3B2081D424359008E5169 /* HISizeModel.m in Sources */,
 				D0F3B1EC1D421907008E5169 /* main.m in Sources */,
+				D0F3B2051D4224D7008E5169 /* HIMainController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
