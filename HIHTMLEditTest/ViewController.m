@@ -27,11 +27,11 @@
 @property (nonatomic, strong) NSMutableArray  *photos;
 
 /** 
- * range数组 －>编辑时记录图片range
- * 1. 添加图片时，要记录该图片的range
- * 2. 删除图片时，通过range与该数组判断得出删除的是哪张照片
+ * 索引数组 －>编辑时记录图片location
+ * 1. 添加图片时，要记录该图片的location
+ * 2. 删除图片时，通过location与该数组判断得出删除的是哪张照片
  */
-@property (nonatomic, strong) NSMutableArray *ranges;
+@property (nonatomic, strong) NSMutableArray *locations;
 
 
 #pragma mark - if need like 知乎
@@ -55,39 +55,43 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"相册" style:UIBarButtonItemStylePlain target:self action:@selector(addSomePhotos)];
     
-    //创建textView；
-    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(MARGIN * 0.5, 74, SCREEN_WIDTH-MARGIN, SCREEN_HEIGHT - 300)];
-    textView.layer.borderWidth = 1;
-    textView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    textView.delegate = self;
-    textView.allowsEditingTextAttributes = YES;
-    [textView becomeFirstResponder];
-    [self.view addSubview:textView];
-    self.textView = textView;
     
-    //取富文本
-    NSString *path = [[NSBundle mainBundle]pathForResource:@"HTML" ofType:@"plist"];
-    NSDictionary *HTMLDict = [NSDictionary dictionaryWithContentsOfFile:path];
-//    NSString *htmlString = [HTMLDict valueForKey:@"HTML"];
+    /*强势分割线*/
+    /**
+     * 此处模拟已经获取到数据，并且后台返回了图片url数组
+     * 此处用文件模拟图片已经下载到本地
+     */
+    NSString *textString_2 = @"我今天很开心[图片], 因为我学会了吃饭[图片][图片]";
+    NSMutableArray *images = [NSMutableArray array];
+    for (int i = 0; i < 3; i++) {
+        NSString *name = [NSString stringWithFormat:@"%d", i+1];
+        UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:name ofType:@"png"]];
+        [images addObject:image];
+    }
+    self.textView.attributedText = [self replaceSymbolStringWithSymbol:@"[图片]" string:textString_2 images:images];
+    
+    /*强势分割线*/
+    /**
+     * 此处模拟已经获取到知乎数据，并进行展示
+     * 因为知乎后台没有返回url数组，直接将HTML文本返回，所以必须从HTML文本中获取图片url
+     * 此处没有进行下载图片，只是单纯的演示如何取出图片url，分类
+     * 此处没有进行排版，只是单纯的进行将超文本转换为富文本进行展示
+     * 此处要吐槽知乎的后台
+     * 若想模拟，请参照上面。
+     */
+    NSDictionary *HTMLDict = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"HTML" ofType:@"plist"]];
+    //NSString *htmlString = [HTMLDict valueForKey:@"HTML"];
     NSString *htmlString = [HTMLDict valueForKey:@"TESTHTML"];
     NSString *textString = [HTMLDict valueForKey:@"TESTSTRING"];
-    
     // 取出每张图片的size
     self.imageSizeArray = [self getImageSizeWithHTML:htmlString];
-    
     // 取出每张图片的下载地址
     NSArray *imageUrls = [self getImageUrlsWithHTML:htmlString];
-    
     // 区分普通图和原图
     [self formatterImageQualityWithImages:imageUrls];
     
-    //将富文本赋值给textView
-//    textView.attributedText = [self htmlAttributeStringByHtmlString:htmlString];
+    // self.textView.attributedText = [self htmlAttributeStringByHtmlString:htmlString];
     
-//    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
-//    attachment.image = ;
-//    attachment.bounds = ;
-//    [NSAttributedString attributedStringWithAttachment:attachment];
 }
 
 /** 打开相册添加照片*/
@@ -99,16 +103,104 @@
     [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
+/** 发送数据到服务器*/
+- (void)postToServer{
+    NSLog(@"\n\n------------------");
+    // 1. 发送带有图片标志的纯文本到服务器
+    NSString *textString = [self textStringWithSymbol:@"[图片]" attributeString:self.textView.attributedText];
+    NSLog(@"发送纯文本到服务器, 纯文本内容为:%@", textString);
+    
+    // 2. 发送图片数据到服务器
+    NSLog(@"发送图片到图片服务器....");
+}
+
+/** 
+ * 将纯文本中带有图片标志的文本替换为富文本
+ * symbol: 图片标志
+ * string: 后台返回的纯文本
+ * images: 已经保存到本地的图片 -> 网络图片先download到沙盒才能控制size
+ */
+- (NSAttributedString *)replaceSymbolStringWithSymbol:(NSString *)symbol string:(NSString *)string images:(NSArray *)images{
+    // 取出所有图片标志的索引
+    NSArray *ranges = [self rangeOfSymbolString:symbol inString:string];
+    
+    #warning Tips 可以先将后台返回的纯文字转成富文本再赋值给textView.attributeText, 或者先其他方式
+    self.textView.attributedText = [[NSAttributedString alloc] initWithString:string];
+    
+    // 只有mutable类型的富文本才能进行编辑
+    NSMutableAttributedString *attributeString = [self.textView.attributedText mutableCopy];
+    
+    #warning Tips about size: 和后台约定好，自己算或者后台给，一般只需要比例即可，可以下载好图片后，利用图片等size计算宽高比.
+    
+    #warning Tips about base: 因为将图片标志替换为图片之后，attributeString的长度回发生变化，所以需要用base进行修正
+    
+    NSUInteger base = 0;
+    for(int i=0; i < ranges.count; i++){
+        NSRange range = NSRangeFromString(ranges[i]);
+        UIImage *image = images[i];
+        CGFloat rate = image.size.width / image.size.height;
+        NSTextAttachment *attach = [[NSTextAttachment alloc] init];
+        attach.image = image;
+        attach.bounds = CGRectMake(0, 10, self.textView.frame.size.width - MARGIN, self.textView.frame.size.width - MARGIN / rate);
+        [attributeString replaceCharactersInRange:NSMakeRange(range.location + base, range.length) withAttributedString:[NSAttributedString attributedStringWithAttachment:attach]];
+        base -= (symbol.length - 1);
+    }
+    
+    return attributeString;
+}
+
+/** 将图片插入到富文本中*/
+- (void)setAttributeStringWithImage:(UIImage *)image{
+    // 1. 保存图片与图片的location
+    [self.photos addObject:image];
+    [self.locations addObject:@(self.textView.selectedRange.location)];
+    
+    // 2. 将图片插入到富文本中
+    NSTextAttachment *attach = [[NSTextAttachment alloc] init];
+    attach.image = image;
+    CGFloat imageRate = image.size.width / image.size.height;
+    attach.bounds = CGRectMake(0, 0, SCREEN_WIDTH - MARGIN * 4, SCREEN_WIDTH - MARGIN * 4 / imageRate);
+    NSAttributedString *imageAttr = [NSAttributedString attributedStringWithAttachment:attach];
+    //    [mutableAttr replaceCharactersInRange:range withAttributedString:imageAttr];
+    NSMutableAttributedString *mutableAttr = [self.textView.attributedText mutableCopy];
+    [mutableAttr insertAttributedString:imageAttr atIndex:self.textView.selectedRange.location];
+    self.textView.attributedText = mutableAttr;
+}
+
+/** 将富文本转换为带有图片标志的纯文本*/
+- (NSString *)textStringWithSymbol:(NSString *)symbol attributeString:(NSAttributedString *)attributeString{
+    //最终纯文本
+    NSMutableString *textString = [NSMutableString stringWithString:attributeString.string];
+    
+    //替换下标的偏移量
+    __block NSUInteger base = 0;
+    
+    //遍历
+    [attributeString enumerateAttribute:NSAttachmentAttributeName inRange:NSMakeRange(0, attributeString.length)
+                     options:0
+                  usingBlock:^(id value, NSRange range, BOOL *stop) {
+                      //检查类型是否是自定义NSTextAttachment类
+                      if (value && [value isKindOfClass:[NSTextAttachment class]]) {
+                          //替换
+                          [textString replaceCharactersInRange:NSMakeRange(range.location + base, range.length) withString:symbol];
+                          //增加偏移量
+                          base += (symbol.length - 1);
+                      }
+                  }];
+    
+    return textString;
+}
+
 #pragma mark - commonly used
 /** 统计文本中所有图片资源标志的range*/
-- (NSArray *)rangeOfSubString:(NSString *)subStr inString:(NSString *)string {
+- (NSArray *)rangeOfSymbolString:(NSString *)symbol inString:(NSString *)string {
     NSMutableArray *rangeArray = [NSMutableArray array];
-    NSString *string1 = [string stringByAppendingString:subStr];
+    NSString *string1 = [string stringByAppendingString:symbol];
     NSString *temp;
     for (int i = 0; i < string.length; i ++) {
-        temp = [string1 substringWithRange:NSMakeRange(i, subStr.length)];
-        if ([temp isEqualToString:subStr]) {
-            NSRange range = {i,subStr.length};
+        temp = [string1 substringWithRange:NSMakeRange(i, symbol.length)];
+        if ([temp isEqualToString:symbol]) {
+            NSRange range = {i, symbol.length};
             [rangeArray addObject:NSStringFromRange(range)];
         }
     }
@@ -240,50 +332,44 @@
 
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
-    
     [picker dismissViewControllerAnimated:YES completion:nil];
     [self.textView becomeFirstResponder];
     
     // 1.取出选中的图片
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     
-    [self.photos addObject:image];
-    NSRange range = NSMakeRange(self.textView.selectedRange.location, 4);
-    [self.ranges addObject:NSStringFromRange(range)];
-    
-    NSMutableAttributedString *mutableAttr = [self.textView.attributedText mutableCopy];
-    [mutableAttr insertAttributedString:[[NSAttributedString alloc] initWithString:@"[图片]"] atIndex:range.location];
-    
-    // 2. 将图片标志"[图片]"替换为图片并进行显示
-    NSTextAttachment *attach = [[NSTextAttachment alloc] init];
-    attach.image = image;
-    CGFloat imageRate = image.size.width / image.size.height;
-    attach.bounds = CGRectMake(0, 0, SCREEN_WIDTH - MARGIN * 1.5, SCREEN_WIDTH - MARGIN * 1.5 / imageRate);
-    NSAttributedString *imageAttr = [NSAttributedString attributedStringWithAttachment:attach];
-    [mutableAttr replaceCharactersInRange:range withAttributedString:imageAttr];
-    self.textView.attributedText = mutableAttr;
-    
-    NSLog(@"imagePickerController:");
-    NSLog(@"text:%@",self.textView.text);
-    NSLog(@"attribute%@",self.textView.attributedText);
+    [self setAttributeStringWithImage:(UIImage *)image];
 }
 
 #pragma mark - UITextViewDelegate
-- (void)textViewDidChange:(UITextView *)textView{
-//    NSLog(@"%@",[self htmlStringByHtmlAttributeString:textView.attributedText]);
-//    NSLog(@"\n\n---------------------------\n\n");
-//    NSLog(@"%@",textView.text);
-}
-
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     NSLog(@"location:%d,length:%d",(int)range.location, (int)range.length);
-    NSLog(@"%@",textView.text);
-    NSLog(@"%@",textView.attributedText);
+    
+    // 模拟点击回车发送资料到服务器
+    if ([text isEqualToString:@"\n"]) {
+        // 提交到服务器
+        [self postToServer];
+    }
     
     return YES;
 }
 
 #pragma mark - getter
+- (UITextView *)textView{
+    if (!_textView) {
+        //创建textView；
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(MARGIN * 0.5, 74, SCREEN_WIDTH-MARGIN, SCREEN_HEIGHT - 300)];
+        textView.layer.borderWidth = 1;
+        textView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        textView.delegate = self;
+        textView.allowsEditingTextAttributes = YES;
+        [textView becomeFirstResponder];
+        [self.view addSubview:textView];
+        _textView = textView;
+    }
+    return _textView;
+}
+
 - (NSMutableArray *)photos{
     if (!_photos) {
         _photos = [NSMutableArray array];
@@ -291,11 +377,11 @@
     return _photos;
 }
 
-- (NSMutableArray *)ranges{
-    if (!_ranges) {
-        _ranges = [NSMutableArray array];
+- (NSMutableArray *)locations{
+    if (!_locations) {
+        _locations = [NSMutableArray array];
     }
-    return _ranges;
+    return _locations;
 }
 
 - (void)didReceiveMemoryWarning {
