@@ -51,6 +51,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"按回车模拟发送请求";
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"相册" style:UIBarButtonItemStylePlain target:self action:@selector(addSomePhotos)];
@@ -108,7 +109,7 @@
     NSLog(@"\n\n------------------");
     // 1. 发送带有图片标志的纯文本到服务器
     NSString *textString = [self textStringWithSymbol:@"[图片]" attributeString:self.textView.attributedText];
-    NSLog(@"发送纯文本到服务器, 纯文本内容为:%@", textString);
+    NSLog(@"发送带有图片标志的纯文本到服务器, 纯文本内容为:%@", textString);
     
     // 2. 发送图片数据到服务器
     NSLog(@"发送图片到图片服务器....");
@@ -141,7 +142,7 @@
         CGFloat rate = image.size.width / image.size.height;
         NSTextAttachment *attach = [[NSTextAttachment alloc] init];
         attach.image = image;
-        attach.bounds = CGRectMake(0, 10, self.textView.frame.size.width - MARGIN, self.textView.frame.size.width - MARGIN / rate);
+        attach.bounds = CGRectMake(10, 10, self.textView.frame.size.width - MARGIN, self.textView.frame.size.width - MARGIN / rate);
         [attributeString replaceCharactersInRange:NSMakeRange(range.location + base, range.length) withAttributedString:[NSAttributedString attributedStringWithAttachment:attach]];
         base -= (symbol.length - 1);
     }
@@ -159,7 +160,7 @@
     NSTextAttachment *attach = [[NSTextAttachment alloc] init];
     attach.image = image;
     CGFloat imageRate = image.size.width / image.size.height;
-    attach.bounds = CGRectMake(0, 0, SCREEN_WIDTH - MARGIN * 4, SCREEN_WIDTH - MARGIN * 4 / imageRate);
+    attach.bounds = CGRectMake(10, 10, SCREEN_WIDTH - MARGIN * 4, SCREEN_WIDTH - MARGIN * 4 / imageRate);
     NSAttributedString *imageAttr = [NSAttributedString attributedStringWithAttachment:attach];
     //    [mutableAttr replaceCharactersInRange:range withAttributedString:imageAttr];
     NSMutableAttributedString *mutableAttr = [self.textView.attributedText mutableCopy];
