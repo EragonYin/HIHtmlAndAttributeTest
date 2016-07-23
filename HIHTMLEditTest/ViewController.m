@@ -53,9 +53,7 @@
     [super viewDidLoad];
     self.title = @"按回车模拟发送请求";
     self.view.backgroundColor = [UIColor whiteColor];
-    self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"相册" style:UIBarButtonItemStylePlain target:self action:@selector(addSomePhotos)];
-    
     
     /*强势分割线*/
     /**
@@ -69,6 +67,7 @@
         UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:name ofType:@"png"]];
         [images addObject:image];
     }
+    
     self.textView.attributedText = [self replaceSymbolStringWithSymbol:@"[图片]" string:textString_2 images:images];
     
     /*强势分割线*/
@@ -122,11 +121,17 @@
  * images: 已经保存到本地的图片 -> 网络图片先download到沙盒才能控制size
  */
 - (NSAttributedString *)replaceSymbolStringWithSymbol:(NSString *)symbol string:(NSString *)string images:(NSArray *)images{
+    
+    string = [self stringInsertString:@"\n" frontString:@"[图片]" inString:string];
     // 取出所有图片标志的索引
     NSArray *ranges = [self rangeOfSymbolString:symbol inString:string];
     
     #warning Tips 可以先将后台返回的纯文字转成富文本再赋值给textView.attributeText, 或者先其他方式
-    self.textView.attributedText = [[NSAttributedString alloc] initWithString:string];
+    
+    NSMutableParagraphStyle *paragraStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraStyle.lineSpacing = 4.0;
+    
+    self.textView.attributedText = [[NSAttributedString alloc] initWithString:string attributes:@{NSParagraphStyleAttributeName:paragraStyle,NSFontAttributeName:[UIFont systemFontOfSize:15]}];
     
     // 只有mutable类型的富文本才能进行编辑
     NSMutableAttributedString *attributeString = [self.textView.attributedText mutableCopy];
@@ -135,19 +140,46 @@
     
     #warning Tips about base: 因为将图片标志替换为图片之后，attributeString的长度回发生变化，所以需要用base进行修正
     
-    NSUInteger base = 0;
+    int base = 0;
     for(int i=0; i < ranges.count; i++){
         NSRange range = NSRangeFromString(ranges[i]);
+        // 这里替换图片
         UIImage *image = images[i];
         CGFloat rate = image.size.width / image.size.height;
         NSTextAttachment *attach = [[NSTextAttachment alloc] init];
         attach.image = image;
-        attach.bounds = CGRectMake(10, 10, self.textView.frame.size.width - MARGIN, self.textView.frame.size.width - MARGIN / rate);
+        attach.bounds = CGRectMake(0, 10, self.textView.frame.size.width - MARGIN, (self.textView.frame.size.width - MARGIN) / rate);
         [attributeString replaceCharactersInRange:NSMakeRange(range.location + base, range.length) withAttributedString:[NSAttributedString attributedStringWithAttachment:attach]];
         base -= (symbol.length - 1);
     }
     
     return attributeString;
+}
+
+/** 插入字符串*/
+- (NSString *)stringInsertString:(NSString *)insertString frontString:(NSString *)frontString inString:(NSString *)inString{
+    NSArray *ranges = [self rangeOfSymbolString:frontString inString:inString];
+    NSMutableString *mutableString = [inString mutableCopy];
+    NSUInteger base = 0;
+    for (NSString *rangeString in ranges) {
+        NSRange range = NSRangeFromString(rangeString);
+        [mutableString insertString:insertString atIndex:range.location + base];
+        base += insertString.length;
+    }
+    return [mutableString copy];
+}
+
+/** 删除字符串*/
+- (NSString *)stringDeleteString:(NSString *)deleteString frontString:(NSString *)frontString inString:(NSString *)inString{
+    NSArray *ranges = [self rangeOfSymbolString:frontString inString:inString];
+    NSMutableString *mutableString = [inString mutableCopy];
+    NSUInteger base = 0;
+    for (NSString *rangeString in ranges) {
+        NSRange range = NSRangeFromString(rangeString);
+        [mutableString deleteCharactersInRange:NSMakeRange(range.location - deleteString.length + base, deleteString.length)];
+        base -= deleteString.length;
+    }
+    return [mutableString copy];
 }
 
 /** 将图片插入到富文本中*/
@@ -160,7 +192,7 @@
     NSTextAttachment *attach = [[NSTextAttachment alloc] init];
     attach.image = image;
     CGFloat imageRate = image.size.width / image.size.height;
-    attach.bounds = CGRectMake(10, 10, SCREEN_WIDTH - MARGIN * 4, SCREEN_WIDTH - MARGIN * 4 / imageRate);
+    attach.bounds = CGRectMake(0, 10, self.textView.frame.size.width - MARGIN, (self.textView.frame.size.width - MARGIN) / imageRate);
     NSAttributedString *imageAttr = [NSAttributedString attributedStringWithAttachment:attach];
     //    [mutableAttr replaceCharactersInRange:range withAttributedString:imageAttr];
     NSMutableAttributedString *mutableAttr = [self.textView.attributedText mutableCopy];
@@ -170,9 +202,10 @@
 
 /** 将富文本转换为带有图片标志的纯文本*/
 - (NSString *)textStringWithSymbol:(NSString *)symbol attributeString:(NSAttributedString *)attributeString{
+    NSString *string = attributeString.string;
+    string = [self stringDeleteString:@"\n" frontString:@"[图片]" inString:string];
     //最终纯文本
-    NSMutableString *textString = [NSMutableString stringWithString:attributeString.string];
-    
+    NSMutableString *textString = [NSMutableString stringWithString:string];
     //替换下标的偏移量
     __block NSUInteger base = 0;
     
@@ -345,7 +378,6 @@
 #pragma mark - UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     NSLog(@"location:%d,length:%d",(int)range.location, (int)range.length);
-    
     // 模拟点击回车发送资料到服务器
     if ([text isEqualToString:@"\n"]) {
         // 提交到服务器
@@ -359,11 +391,10 @@
 - (UITextView *)textView{
     if (!_textView) {
         //创建textView；
-        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(MARGIN * 0.5, 74, SCREEN_WIDTH-MARGIN, SCREEN_HEIGHT - 300)];
-        textView.layer.borderWidth = 1;
-        textView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 300 + 64)];
         textView.delegate = self;
         textView.allowsEditingTextAttributes = YES;
+        textView.contentInset = UIEdgeInsetsMake(4, 4, 4, -4);
         [textView becomeFirstResponder];
         [self.view addSubview:textView];
         _textView = textView;
