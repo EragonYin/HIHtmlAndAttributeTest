@@ -19,6 +19,9 @@
 		D0F3B20C1D4348AE008E5169 /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = D0F3B2091D4348AE008E5169 /* 1.png */; };
 		D0F3B20D1D4348AE008E5169 /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = D0F3B20A1D4348AE008E5169 /* 2.png */; };
 		D0F3B20E1D4348AE008E5169 /* 3.png in Resources */ = {isa = PBXBuildFile; fileRef = D0F3B20B1D4348AE008E5169 /* 3.png */; };
+		D79E6897207BB75800104A1D /* HIEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = D79E6896207BB75800104A1D /* HIEditController.m */; };
+		D79E689A207BBA4B00104A1D /* HIBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = D79E6899207BBA4B00104A1D /* HIBaseController.m */; };
+		D79E689D207BBAAC00104A1D /* HIShowController.m in Sources */ = {isa = PBXBuildFile; fileRef = D79E689C207BBAAC00104A1D /* HIShowController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +43,12 @@
 		D0F3B2091D4348AE008E5169 /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
 		D0F3B20A1D4348AE008E5169 /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
 		D0F3B20B1D4348AE008E5169 /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
+		D79E6895207BB75800104A1D /* HIEditController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HIEditController.h; sourceTree = "<group>"; };
+		D79E6896207BB75800104A1D /* HIEditController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HIEditController.m; sourceTree = "<group>"; };
+		D79E6898207BBA4B00104A1D /* HIBaseController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HIBaseController.h; sourceTree = "<group>"; };
+		D79E6899207BBA4B00104A1D /* HIBaseController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HIBaseController.m; sourceTree = "<group>"; };
+		D79E689B207BBAAC00104A1D /* HIShowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HIShowController.h; sourceTree = "<group>"; };
+		D79E689C207BBAAC00104A1D /* HIShowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HIShowController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,14 +81,7 @@
 		D0F3B1E91D421907008E5169 /* HIHTMLEditTest */ = {
 			isa = PBXGroup;
 			children = (
-				D0F3B1ED1D421907008E5169 /* AppDelegate.h */,
-				D0F3B1EE1D421907008E5169 /* AppDelegate.m */,
-				D0F3B2031D4224D7008E5169 /* HIMainController.h */,
-				D0F3B2041D4224D7008E5169 /* HIMainController.m */,
-				D0F3B1F01D421907008E5169 /* ViewController.h */,
-				D0F3B1F11D421907008E5169 /* ViewController.m */,
-				D0F3B2061D424359008E5169 /* HISizeModel.h */,
-				D0F3B2071D424359008E5169 /* HISizeModel.m */,
+				D79E689E207BBC4600104A1D /* classes */,
 				D0F3B2011D421A53008E5169 /* HTML.plist */,
 				D0F3B1F31D421907008E5169 /* Main.storyboard */,
 				D0F3B1F61D421907008E5169 /* Assets.xcassets */,
@@ -99,6 +101,51 @@
 				D0F3B1EB1D421907008E5169 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D79E689E207BBC4600104A1D /* classes */ = {
+			isa = PBXGroup;
+			children = (
+				D79E689F207BBC9500104A1D /* main */,
+			);
+			path = classes;
+			sourceTree = "<group>";
+		};
+		D79E689F207BBC9500104A1D /* main */ = {
+			isa = PBXGroup;
+			children = (
+				D0F3B1ED1D421907008E5169 /* AppDelegate.h */,
+				D0F3B1EE1D421907008E5169 /* AppDelegate.m */,
+				D79E68A1207BBCBA00104A1D /* model */,
+				D79E68A0207BBCB100104A1D /* controller */,
+			);
+			path = main;
+			sourceTree = "<group>";
+		};
+		D79E68A0207BBCB100104A1D /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				D79E6898207BBA4B00104A1D /* HIBaseController.h */,
+				D79E6899207BBA4B00104A1D /* HIBaseController.m */,
+				D0F3B2031D4224D7008E5169 /* HIMainController.h */,
+				D0F3B2041D4224D7008E5169 /* HIMainController.m */,
+				D79E6895207BB75800104A1D /* HIEditController.h */,
+				D79E6896207BB75800104A1D /* HIEditController.m */,
+				D79E689B207BBAAC00104A1D /* HIShowController.h */,
+				D79E689C207BBAAC00104A1D /* HIShowController.m */,
+				D0F3B1F01D421907008E5169 /* ViewController.h */,
+				D0F3B1F11D421907008E5169 /* ViewController.m */,
+			);
+			path = controller;
+			sourceTree = "<group>";
+		};
+		D79E68A1207BBCBA00104A1D /* model */ = {
+			isa = PBXGroup;
+			children = (
+				D0F3B2061D424359008E5169 /* HISizeModel.h */,
+				D0F3B2071D424359008E5169 /* HISizeModel.m */,
+			);
+			path = model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -129,7 +176,7 @@
 			attributes = {
 				CLASSPREFIX = HI;
 				LastUpgradeCheck = 0730;
-				ORGANIZATIONNAME = "风聆小镇工作室";
+				ORGANIZATIONNAME = chenhannan;
 				TargetAttributes = {
 					D0F3B1E61D421906008E5169 = {
 						CreatedOnToolsVersion = 7.3;
@@ -176,6 +223,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D79E689D207BBAAC00104A1D /* HIShowController.m in Sources */,
+				D79E689A207BBA4B00104A1D /* HIBaseController.m in Sources */,
+				D79E6897207BB75800104A1D /* HIEditController.m in Sources */,
 				D0F3B1F21D421907008E5169 /* ViewController.m in Sources */,
 				D0F3B1EF1D421907008E5169 /* AppDelegate.m in Sources */,
 				D0F3B2081D424359008E5169 /* HISizeModel.m in Sources */,
@@ -329,6 +379,7 @@
 				D0F3B2001D421907008E5169 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
