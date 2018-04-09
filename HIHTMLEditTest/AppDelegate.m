@@ -3,7 +3,7 @@
 //  HIHTMLEditTest
 //
 //  Created by HIChen on 16/7/22.
-//  Copyright © 2016年 风聆小镇工作室. All rights reserved.
+//  Copyright © 2016年 chenhannan. All rights reserved.
 //
 
 #import "AppDelegate.h"

@@ -3,7 +3,7 @@
 //  HIHTMLEditTest
 //
 //  Created by HIChen on 16/7/22.
-//  Copyright © 2016年 风聆小镇工作室. All rights reserved.
+//  Copyright © 2016年 chenhannan. All rights reserved.
 //
 
 #import "ViewController.h"
@@ -68,7 +68,7 @@
         [images addObject:image];
     }
     
-    self.textView.attributedText = [self replaceSymbolStringWithSymbol:@"[图片]" string:textString_2 images:images];
+//    self.textView.attributedText = [self replaceSymbolStringWithSymbol:@"[图片]" string:textString_2 images:images];
     
     /*强势分割线*/
     /**
@@ -80,9 +80,14 @@
      * 若想模拟，请参照上面。
      */
     NSDictionary *HTMLDict = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"HTML" ofType:@"plist"]];
-    //NSString *htmlString = [HTMLDict valueForKey:@"HTML"];
+//    NSString *htmlString = [HTMLDict valueForKey:@"HTML"];
     NSString *htmlString = [HTMLDict valueForKey:@"TESTHTML"];
-    NSString *textString = [HTMLDict valueForKey:@"TESTSTRING"];
+//    NSString *textString = [HTMLDict valueForKey:@"TESTSTRING"];
+    
+    // 控制html图片的宽高
+    NSString *css = [NSString stringWithFormat:@"<head><style>img{width:%f !important;height:auto;}</style></head>", self.textView.frame.size.width - 20];
+    htmlString = [NSString stringWithFormat:@"%@%@", css, htmlString];
+    
     // 取出每张图片的size
     self.imageSizeArray = [self getImageSizeWithHTML:htmlString];
     // 取出每张图片的下载地址
@@ -90,8 +95,7 @@
     // 区分普通图和原图
     [self formatterImageQualityWithImages:imageUrls];
     
-    // self.textView.attributedText = [self htmlAttributeStringByHtmlString:htmlString];
-    
+     self.textView.attributedText = [self htmlAttributeStringByHtmlString:htmlString];
 }
 
 /** 打开相册添加照片*/
