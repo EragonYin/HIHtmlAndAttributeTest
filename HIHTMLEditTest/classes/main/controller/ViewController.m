@@ -68,7 +68,7 @@
         [images addObject:image];
     }
     
-//    self.textView.attributedText = [self replaceSymbolStringWithSymbol:@"[图片]" string:textString_2 images:images];
+    self.textView.attributedText = [self replaceSymbolStringWithSymbol:@"[图片]" string:textString_2 images:images];
     
     /*强势分割线*/
     /**
@@ -95,7 +95,7 @@
     // 区分普通图和原图
     [self formatterImageQualityWithImages:imageUrls];
     
-     self.textView.attributedText = [self htmlAttributeStringByHtmlString:htmlString];
+//     self.textView.attributedText = [self htmlAttributeStringByHtmlString:htmlString];
 }
 
 /** 打开相册添加照片*/

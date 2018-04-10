@@ -116,8 +116,8 @@
 			children = (
 				D0F3B1ED1D421907008E5169 /* AppDelegate.h */,
 				D0F3B1EE1D421907008E5169 /* AppDelegate.m */,
-				D79E68A1207BBCBA00104A1D /* model */,
 				D79E68A0207BBCB100104A1D /* controller */,
+				D79E68A1207BBCBA00104A1D /* model */,
 			);
 			path = main;
 			sourceTree = "<group>";

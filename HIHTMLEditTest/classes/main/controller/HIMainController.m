@@ -71,6 +71,12 @@
             item.vcClass = [HIShowController class];
             [_datas addObject:item];
         }];
+        [HIMainItem item:^(HIMainItem *item) {
+            item.title = @"测试";
+            item.detail = @"综合使用";
+            item.vcClass = [ViewController class];
+            [_datas addObject:item];
+        }];
     }
     return _datas;
 }
