@@ -7,6 +7,7 @@
 //
 
 #import "HIEditController.h"
+#import "HINetworkTool.h"
 
 @interface HIEditController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate>
 
@@ -73,6 +74,18 @@
 /** 把内容上传到服务器*/
 - (void)sendContent {
     NSLog(@"模拟发送到服务器");
+    
+    // 1.替换图片资源为图片标志，获取纯文本
+    NSString *content = [self textStringWithSymbol:@"[图片]" attributeString:self.textView.attributedText];
+    
+    // 2.将图片上传到资源服务器，获取图片url
+    [HINetworkTool uploadImage:self.photos.firstObject completed:^(id data, int errorCode) {
+        
+    }];
+    // 3.将纯文本和图片资源url同时上传到应用服务器
+    [HINetworkTool uploadContent:@{@"content":content} completed:^(id data, int errorCode) {
+        
+    }];
 }
 
 #pragma mark - UITextViewDelegate
@@ -97,7 +110,7 @@
     
     // 1.取出选中的图片
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-    
+    // 2.将图片添加到文本中
     [self setAttributeStringWithImage:image];
 }
 
@@ -120,4 +133,24 @@
     self.textView.attributedText = mutableAttr;
 }
 
+/** 将富文本转换为带有symbol图片标志的纯文本*/
+- (NSString *)textStringWithSymbol:(NSString *)symbol attributeString:(NSAttributedString *)attributeString{
+    NSString *string = attributeString.string;
+    // 最终纯文本
+    NSMutableString *textString = [NSMutableString stringWithString:string];
+    // 替换下标的偏移量
+    __block NSUInteger base = 0;
+    
+    // 遍历
+    [attributeString enumerateAttribute:NSAttachmentAttributeName inRange:NSMakeRange(0, attributeString.length) options:0 usingBlock:^(id value, NSRange range, BOOL *stop) {
+        // 检查类型是否是自定义NSTextAttachment类
+        if (value && [value isKindOfClass:[NSTextAttachment class]]) {
+            // 替换
+            [textString replaceCharactersInRange:NSMakeRange(range.location + base, range.length) withString:symbol];
+            // 增加偏移量
+            base += (symbol.length - 1);
+        }
+    }];
+    return textString;
+}
 @end

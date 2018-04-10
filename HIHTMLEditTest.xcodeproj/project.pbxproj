@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0E39E96207C67FA00BC1890 /* HINetworkTool.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E39E95207C67FA00BC1890 /* HINetworkTool.m */; };
 		D0F3B1EC1D421907008E5169 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F3B1EB1D421907008E5169 /* main.m */; };
 		D0F3B1EF1D421907008E5169 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F3B1EE1D421907008E5169 /* AppDelegate.m */; };
 		D0F3B1F21D421907008E5169 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F3B1F11D421907008E5169 /* ViewController.m */; };
@@ -25,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D0E39E94207C67FA00BC1890 /* HINetworkTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HINetworkTool.h; sourceTree = "<group>"; };
+		D0E39E95207C67FA00BC1890 /* HINetworkTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HINetworkTool.m; sourceTree = "<group>"; };
 		D0F3B1E71D421907008E5169 /* HIHTMLEditTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HIHTMLEditTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0F3B1EB1D421907008E5169 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D0F3B1ED1D421907008E5169 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -62,6 +65,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D0E39E93207C67D900BC1890 /* tool */ = {
+			isa = PBXGroup;
+			children = (
+				D0E39E97207C681B00BC1890 /* network */,
+			);
+			path = tool;
+			sourceTree = "<group>";
+		};
+		D0E39E97207C681B00BC1890 /* network */ = {
+			isa = PBXGroup;
+			children = (
+				D0E39E94207C67FA00BC1890 /* HINetworkTool.h */,
+				D0E39E95207C67FA00BC1890 /* HINetworkTool.m */,
+			);
+			path = network;
+			sourceTree = "<group>";
+		};
 		D0F3B1DE1D421906008E5169 = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +126,7 @@
 		D79E689E207BBC4600104A1D /* classes */ = {
 			isa = PBXGroup;
 			children = (
+				D0E39E93207C67D900BC1890 /* tool */,
 				D79E689F207BBC9500104A1D /* main */,
 			);
 			path = classes;
@@ -225,6 +246,7 @@
 			files = (
 				D79E689D207BBAAC00104A1D /* HIShowController.m in Sources */,
 				D79E689A207BBA4B00104A1D /* HIBaseController.m in Sources */,
+				D0E39E96207C67FA00BC1890 /* HINetworkTool.m in Sources */,
 				D79E6897207BB75800104A1D /* HIEditController.m in Sources */,
 				D0F3B1F21D421907008E5169 /* ViewController.m in Sources */,
 				D0F3B1EF1D421907008E5169 /* AppDelegate.m in Sources */,
