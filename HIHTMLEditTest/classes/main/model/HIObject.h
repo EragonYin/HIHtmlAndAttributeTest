@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+static NSString *imageSymbol = @"[图片]";
+
 @interface HIObject : NSObject
 
 @end
@@ -15,6 +17,9 @@
 @interface HIContentModel : HIObject
 
 + (instancetype)model:(NSString *)content imageUrls:(NSArray *)imageUrls;
+
++ (instancetype)modelWithDictionary:(NSDictionary *)dictionary;
+- (NSDictionary *)dictionary;
 
 /** 文章纯文本*/
 @property (nonatomic, strong) NSString *content;

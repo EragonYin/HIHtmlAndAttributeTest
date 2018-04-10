@@ -64,7 +64,7 @@
     NSMutableArray *images = [NSMutableArray array];
     for (int i = 0; i < 3; i++) {
         NSString *name = [NSString stringWithFormat:@"%d", i+1];
-        UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:name ofType:@"png"]];
+        UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:name ofType:@"png"]];
         [images addObject:image];
     }
     
@@ -156,7 +156,6 @@
         [attributeString replaceCharactersInRange:NSMakeRange(range.location + base, range.length) withAttributedString:[NSAttributedString attributedStringWithAttachment:attach]];
         base -= (symbol.length - 1);
     }
-    
     return attributeString;
 }
 

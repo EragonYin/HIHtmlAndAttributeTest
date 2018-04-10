@@ -53,7 +53,27 @@
             compelted(respone, 0);
         });
     });
-    
+}
+
+/** 获取所有文章*/
++ (void)getAllContentsWithCompleted:(networkCompletedBlock)compelted {
+    // 1. 这里仅仅是模拟网络请求，请结合实际运用
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        // 0.模拟网络传输的耗时
+        sleep(1);
+        
+        // 1.此处模拟服务器返回数据
+        NSArray *dicts = [[HIDataBase shareInstance] getContents];
+        NSMutableArray *datas = [NSMutableArray arrayWithCapacity:dicts.count];
+        for (NSDictionary *dict in dicts) {
+            [datas addObject:[HIContentModel modelWithDictionary:dict]];
+        }
+        
+        // 2.网络请求回调
+        dispatch_async(dispatch_get_main_queue(), ^{
+            compelted(datas, 0);
+        });
+    });
 }
 
 @end

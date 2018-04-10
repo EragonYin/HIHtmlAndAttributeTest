@@ -77,7 +77,7 @@
     NSLog(@"模拟发送到服务器");
     
     // 1.替换图片资源为图片标志，获取纯文本
-    NSString *content = [self textStringWithSymbol:@"[图片]" attributeString:self.textView.attributedText];
+    NSString *content = [self textStringWithSymbol:imageSymbol attributeString:self.textView.attributedText];
     
     // 2.将图片上传到资源服务器，获取图片url
     __weak typeof(self) weakSelf = self;

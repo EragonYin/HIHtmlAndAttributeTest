@@ -45,10 +45,6 @@ static HIDataBase *_instance;
     if (!_contentsPath) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         _contentsPath = [paths.firstObject stringByAppendingPathComponent:@"contents.plist"];
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        if (![fileManager isExecutableFileAtPath:_contentsPath]) {
-            [fileManager createFileAtPath:_contentsPath contents:nil attributes:nil];
-        }
     }
     return _contentsPath;
 }
@@ -59,6 +55,7 @@ static HIDataBase *_instance;
         _imageFolder = [paths.firstObject stringByAppendingString:@"/images"];
         NSFileManager *fileManager = [NSFileManager defaultManager];
         if (![fileManager isExecutableFileAtPath:_imageFolder]) {
+            // 创建images文件夹
             [fileManager createDirectoryAtPath:_imageFolder withIntermediateDirectories:YES attributes:nil error:nil];
         }
     }
@@ -69,7 +66,19 @@ static HIDataBase *_instance;
 
 /** 获取所有文章数据*/
 - (NSArray *)getContents {
-    return [NSArray arrayWithContentsOfFile:self.contentsPath];
+    NSArray *datas = [NSArray arrayWithContentsOfFile:self.contentsPath];
+    
+    // 模拟服务器拼接完整的图片资源url
+    for (NSDictionary *content in datas) {
+        NSMutableArray *imageUrls = [content valueForKey:@"imageUrls"];
+        NSMutableArray *newImageUrls = [NSMutableArray arrayWithCapacity:imageUrls.count];
+        for (NSString *imageUrl in imageUrls) {
+            NSString *result = [NSString stringWithFormat:@"%@/%@", self.imageFolder, imageUrl];
+            [newImageUrls addObject:result];
+        }
+        [content setValue:newImageUrls forKey:@"imageUrls"];
+    }
+    return datas;
 }
 
 /** 保存一条文章*/
@@ -79,10 +88,7 @@ static HIDataBase *_instance;
         contents = [NSMutableArray array];
     }
     
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    [dict setValue:content.content forKey:@"body"];
-    [dict setValue:content.imageUrls forKey:@"imageUrls"];
-    [contents addObject:dict];
+    [contents addObject:content.dictionary];
     BOOL result = [contents writeToFile:self.contentsPath atomically:YES];
     
     if (result) {
@@ -96,12 +102,14 @@ static HIDataBase *_instance;
 - (NSString *)saveImage:(UIImage *)image {
     // 取个时间戳来做文件名
     NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
-    NSString *filePath = [NSString stringWithFormat:@"%@/image%lld.png", self.imageFolder, (long long)time];
+    NSString *fileName = [NSString stringWithFormat:@"image%lld.png", (long long)time];
+    NSString *filePath = [NSString stringWithFormat:@"%@/%@", self.imageFolder, fileName];
     
+    // 图片有时候太大，影响demo到展示效果，所以在此做了压缩，资源服务器应当存储两套URL，分别为缩略图及原图的URL
     BOOL result = [UIImageJPEGRepresentation(image, 0.1) writeToFile:filePath atomically:YES];
     if (result) {
         NSLog(@"保存图片成功: %@", filePath);
-        return filePath;
+        return fileName;
     } else {
         NSLog(@"保存图片失败");
         return nil;
