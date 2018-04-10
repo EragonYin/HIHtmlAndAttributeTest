@@ -8,6 +8,7 @@
 
 #import "HIEditController.h"
 #import "HINetworkTool.h"
+#import "HIOperation.h"
 
 @interface HIEditController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate>
 
@@ -79,13 +80,15 @@
     NSString *content = [self textStringWithSymbol:@"[图片]" attributeString:self.textView.attributedText];
     
     // 2.将图片上传到资源服务器，获取图片url
-    [HINetworkTool uploadImage:self.photos.firstObject completed:^(id data, int errorCode) {
-        
+    __weak typeof(self) weakSelf = self;
+    [self updataImages:self.photos completed:^(NSArray *imageUrls) {
+        // 3.将纯文本和图片资源url同时上传到应用服务器
+        [weakSelf uploadContent:content imageUrls:imageUrls completed:^{
+            // 4.上传成功，该退出当前控制器了
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        }];
     }];
-    // 3.将纯文本和图片资源url同时上传到应用服务器
-    [HINetworkTool uploadContent:@{@"content":content} completed:^(id data, int errorCode) {
-        
-    }];
+    
 }
 
 #pragma mark - UITextViewDelegate
@@ -153,4 +156,54 @@
     }];
     return textString;
 }
+
+#pragma mark - 网络请求
+
+/**
+ * 传图片到资源服务器
+ * images: 需要上传的图片数组
+ * completed: 回调上传完成后获得去图片url数组
+ */
+- (void)updataImages:(NSArray *)images completed:(void(^)(NSArray *imageUrls))completed {
+    // 若没有图片，直接回调完成，保证业务逻辑
+    if (images == nil || images.count == 0) {
+        completed(nil);
+        return;
+    }
+    
+    // 若有图片，应当有序上传到资源服务器，获得有序的图片url数组
+    NSMutableArray *imageUrls = [NSMutableArray arrayWithCapacity:images.count];
+    
+    /**
+     * NSOperationQueue相当于一个线程池，将所需要执行的任务都添加进去
+     * queue.maxConcurrentOperationCount设置为1保证该线程池中每次只有一个任务在执行
+     * 使用自定义的 HIOperation 可以认为的控制任务的状态，保证任务是有序执行，并且是执行完成的 (NSOperation无法保证有序)
+     * 添加所有需要执行的任务后，需要自己监听判断线程池的所有任务是否已经完成(可以使用累增或累加计数方式)
+     */
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 1;
+    
+    // 循环添加上传任务进队列
+    for (UIImage *image in self.photos) {
+        HIOperation *operation = [HIOperation operationWithBlokc:^(HIOperation *operation) {
+            [HINetworkTool uploadImage:image completed:^(NSString *url, int errorCode) {
+                [imageUrls addObject:url];
+                [operation finished];
+                if (image == images.lastObject) { // 当图片为最后一张，说明都上传完毕了
+                    // 回调图片资源数组
+                    completed(imageUrls);
+                }
+            }];
+        }];
+        [queue addOperation:operation];
+    }
+}
+
+/** 上传文章到应用服务器*/
+- (void)uploadContent:(NSString *)content imageUrls:(NSArray *)imageUrls completed:(void(^)(void))completed {
+    [HINetworkTool uploadContent:[HIContentModel model:content imageUrls:imageUrls] completed:^(id data, int errorCode) {
+        completed();
+    }];
+}
+
 @end

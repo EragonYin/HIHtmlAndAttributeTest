@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import "HIObject.h"
+
 typedef void(^networkCompletedBlock)(id data, int errorCode);
 
 @interface HINetworkTool : NSObject
@@ -17,6 +19,6 @@ typedef void(^networkCompletedBlock)(id data, int errorCode);
 + (void)uploadImage:(UIImage *)image completed:(networkCompletedBlock)compelted;
 
 /** 提交文章到应用服务器*/
-+ (void)uploadContent:(NSDictionary *)content completed:(networkCompletedBlock)compelted;
++ (void)uploadContent:(HIContentModel *)content completed:(networkCompletedBlock)compelted;
 
 @end

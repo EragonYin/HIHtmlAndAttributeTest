@@ -25,13 +25,13 @@
             [respone setValue:@(0) forKey:@"ret_code"];
             
             // 3. 网络请求回调
-            compelted(respone, 0);
+            compelted([respone valueForKey:@"url"], 0);
         });
     });
 }
 
 /** 提交文章到应用服务器*/
-+ (void)uploadContent:(NSDictionary *)content completed:(networkCompletedBlock)compelted {
++ (void)uploadContent:(HIContentModel *)content completed:(networkCompletedBlock)compelted {
     // 1. 这里仅仅是模拟网络请求，请结合实际运用
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         sleep(1); // 模拟网络传输的耗时
