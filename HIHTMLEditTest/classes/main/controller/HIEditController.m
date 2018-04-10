@@ -117,7 +117,6 @@
     [self setAttributeStringWithImage:image];
 }
 
-
 #pragma mark - private
 /** 将图片插入到富文本中*/
 - (void)setAttributeStringWithImage:(UIImage *)image{

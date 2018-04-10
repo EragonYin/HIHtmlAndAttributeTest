@@ -10,6 +10,7 @@
 		D0E39E96207C67FA00BC1890 /* HINetworkTool.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E39E95207C67FA00BC1890 /* HINetworkTool.m */; };
 		D0E39E9A207C80FD00BC1890 /* HIObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E39E99207C80FD00BC1890 /* HIObject.m */; };
 		D0E39E9E207C83F400BC1890 /* HIOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E39E9C207C83F300BC1890 /* HIOperation.m */; };
+		D0E39EA1207C8A8A00BC1890 /* HIDataBase.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E39EA0207C8A8A00BC1890 /* HIDataBase.m */; };
 		D0F3B1EC1D421907008E5169 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F3B1EB1D421907008E5169 /* main.m */; };
 		D0F3B1EF1D421907008E5169 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F3B1EE1D421907008E5169 /* AppDelegate.m */; };
 		D0F3B1F21D421907008E5169 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F3B1F11D421907008E5169 /* ViewController.m */; };
@@ -34,6 +35,8 @@
 		D0E39E99207C80FD00BC1890 /* HIObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HIObject.m; sourceTree = "<group>"; };
 		D0E39E9C207C83F300BC1890 /* HIOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HIOperation.m; sourceTree = "<group>"; };
 		D0E39E9D207C83F300BC1890 /* HIOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HIOperation.h; sourceTree = "<group>"; };
+		D0E39E9F207C8A8A00BC1890 /* HIDataBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HIDataBase.h; sourceTree = "<group>"; };
+		D0E39EA0207C8A8A00BC1890 /* HIDataBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HIDataBase.m; sourceTree = "<group>"; };
 		D0F3B1E71D421907008E5169 /* HIHTMLEditTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HIHTMLEditTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0F3B1EB1D421907008E5169 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D0F3B1ED1D421907008E5169 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -76,6 +79,8 @@
 			children = (
 				D0E39E9B207C83F300BC1890 /* HIOperation */,
 				D0E39E97207C681B00BC1890 /* network */,
+				D0E39E9F207C8A8A00BC1890 /* HIDataBase.h */,
+				D0E39EA0207C8A8A00BC1890 /* HIDataBase.m */,
 			);
 			path = tool;
 			sourceTree = "<group>";
@@ -271,6 +276,7 @@
 				D0E39E9E207C83F400BC1890 /* HIOperation.m in Sources */,
 				D0F3B1EF1D421907008E5169 /* AppDelegate.m in Sources */,
 				D0F3B2081D424359008E5169 /* HISizeModel.m in Sources */,
+				D0E39EA1207C8A8A00BC1890 /* HIDataBase.m in Sources */,
 				D0F3B1EC1D421907008E5169 /* main.m in Sources */,
 				D0F3B2051D4224D7008E5169 /* HIMainController.m in Sources */,
 			);
