@@ -22,7 +22,7 @@ static NSString *imageSymbol = @"[图片]";
 - (NSDictionary *)dictionary;
 
 /** 文章纯文本*/
-@property (nonatomic, strong) NSString *content;
+@property (nonatomic, strong) NSString *body;
 /** 图片资源的url数组*/
 @property (nonatomic, strong) NSArray *imageUrls;
 

@@ -11,6 +11,7 @@
 		D0E39E9A207C80FD00BC1890 /* HIObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E39E99207C80FD00BC1890 /* HIObject.m */; };
 		D0E39E9E207C83F400BC1890 /* HIOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E39E9C207C83F300BC1890 /* HIOperation.m */; };
 		D0E39EA1207C8A8A00BC1890 /* HIDataBase.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E39EA0207C8A8A00BC1890 /* HIDataBase.m */; };
+		D0E39EA4207CA7C400BC1890 /* HITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E39EA3207CA7C400BC1890 /* HITableViewController.m */; };
 		D0F3B1EC1D421907008E5169 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F3B1EB1D421907008E5169 /* main.m */; };
 		D0F3B1EF1D421907008E5169 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F3B1EE1D421907008E5169 /* AppDelegate.m */; };
 		D0F3B1F21D421907008E5169 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F3B1F11D421907008E5169 /* ViewController.m */; };
@@ -37,6 +38,8 @@
 		D0E39E9D207C83F300BC1890 /* HIOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HIOperation.h; sourceTree = "<group>"; };
 		D0E39E9F207C8A8A00BC1890 /* HIDataBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HIDataBase.h; sourceTree = "<group>"; };
 		D0E39EA0207C8A8A00BC1890 /* HIDataBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HIDataBase.m; sourceTree = "<group>"; };
+		D0E39EA2207CA7C400BC1890 /* HITableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HITableViewController.h; sourceTree = "<group>"; };
+		D0E39EA3207CA7C400BC1890 /* HITableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HITableViewController.m; sourceTree = "<group>"; };
 		D0F3B1E71D421907008E5169 /* HIHTMLEditTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HIHTMLEditTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0F3B1EB1D421907008E5169 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D0F3B1ED1D421907008E5169 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -175,6 +178,8 @@
 				D79E6896207BB75800104A1D /* HIEditController.m */,
 				D79E689B207BBAAC00104A1D /* HIShowController.h */,
 				D79E689C207BBAAC00104A1D /* HIShowController.m */,
+				D0E39EA2207CA7C400BC1890 /* HITableViewController.h */,
+				D0E39EA3207CA7C400BC1890 /* HITableViewController.m */,
 				D0F3B1F01D421907008E5169 /* ViewController.h */,
 				D0F3B1F11D421907008E5169 /* ViewController.m */,
 			);
@@ -279,6 +284,7 @@
 				D0E39EA1207C8A8A00BC1890 /* HIDataBase.m in Sources */,
 				D0F3B1EC1D421907008E5169 /* main.m in Sources */,
 				D0F3B2051D4224D7008E5169 /* HIMainController.m in Sources */,
+				D0E39EA4207CA7C400BC1890 /* HITableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

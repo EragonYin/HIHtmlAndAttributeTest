@@ -8,7 +8,7 @@
 
 #import "HIMainController.h"
 #import "HIEditController.h"
-#import "HIShowController.h"
+#import "HITableViewController.h"
 #import "ViewController.h"
 
 @implementation HIMainItem
@@ -68,7 +68,7 @@
         [HIMainItem item:^(HIMainItem *item) {
             item.title = @"展示富文本";
             item.detail = @"模拟从应用服务器获取文本及相关图片资源url，处理展示富文本";
-            item.vcClass = [HIShowController class];
+            item.vcClass = [HITableViewController class];
             [_datas addObject:item];
         }];
         [HIMainItem item:^(HIMainItem *item) {

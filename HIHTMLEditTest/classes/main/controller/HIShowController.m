@@ -11,6 +11,8 @@
 
 @interface HIShowController ()
 
+/** 文章内容*/
+@property (nonatomic, strong) HIContentModel *content;
 /** textView*/
 @property (nonatomic, strong) UITextView *textView;
 
@@ -18,20 +20,29 @@
 
 @implementation HIShowController
 
++ (instancetype)controllerWithContent:(HIContentModel *)content {
+    return [[self alloc] initWithContent:content];
+}
+
+- (instancetype)initWithContent:(HIContentModel *)content {
+    if (self = [super init]) {
+        self.content = content;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    NSArray *contents = [[HIDataBase shareInstance] getContents];
-    NSDictionary *content = contents.firstObject;
-    NSArray *imageUrls = [content valueForKey:@"imageUrls"];
+    self.title = @"文章展示";
     
+    NSArray *imageUrls = self.content.imageUrls;
     NSMutableArray *images = [NSMutableArray array];
-    for (NSString *url in imageUrls) {
+    for (NSString *url in imageUrls) { // 此处模拟将所有图片下载到本地，或者用SDWebImage将所有图片缓存
         [images addObject:[UIImage imageWithContentsOfFile:url]];
     }
-    
-    NSString *body = [content valueForKey:@"body"];
+    NSString *body = self.content.body;
     
     NSAttributedString *attributeString = [self replaceSymbolStringWithSymbol:imageSymbol string:body images:images];
     self.textView.attributedText = attributeString;
@@ -46,10 +57,9 @@
 #pragma mark - getter
 - (UITextView *)textView {
     if (!_textView) {
-        CGFloat margin = 10;
-        _textView = [[UITextView alloc] init];
-        _textView.frame = CGRectMake(margin, HI_NAVIGATIONBAR_H + margin, self.view.bounds.size.width - margin * 2, 320);
+        _textView = [[UITextView alloc] initWithFrame:self.view.bounds];
         _textView.editable = NO;
+        _textView.font = [UIFont systemFontOfSize:20];
         _textView.layer.borderColor = [UIColor lightGrayColor].CGColor;
         _textView.layer.borderWidth = 1;
         _textView.layer.cornerRadius = 4;
@@ -113,5 +123,7 @@
     }
     return rangeArray;
 }
+
+
 
 @end

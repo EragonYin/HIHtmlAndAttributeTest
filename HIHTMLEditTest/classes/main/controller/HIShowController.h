@@ -7,7 +7,10 @@
 //
 
 #import "HIBaseController.h"
+#import "HIObject.h"
 
 @interface HIShowController : HIBaseController
+
++ (instancetype)controllerWithContent:(HIContentModel *)content;
 
 @end
