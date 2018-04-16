@@ -184,7 +184,7 @@
     
     // 循环添加上传任务进队列
     for (UIImage *image in self.photos) {
-        HIOperation *operation = [HIOperation operationWithBlokc:^(HIOperation *operation) {
+        HIOperation *op = [HIOperation operationWithBlokc:^(HIOperation *operation) {
             [HINetworkTool uploadImage:image completed:^(NSString *url, int errorCode) {
                 [imageUrls addObject:url];
                 [operation finished];
@@ -194,7 +194,7 @@
                 }
             }];
         }];
-        [queue addOperation:operation];
+        [queue addOperation:op];
     }
 }
 

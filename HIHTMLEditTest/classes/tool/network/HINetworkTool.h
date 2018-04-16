@@ -21,6 +21,9 @@ typedef void(^networkCompletedBlock)(id data, int errorCode);
 /** 提交文章到应用服务器*/
 + (void)uploadContent:(HIContentModel *)content completed:(networkCompletedBlock)compelted;
 
+/** 下载并图片*/
++ (void)downloadImageWithImageUrl:(NSString *)imageUrl compelted:(networkCompletedBlock)compelted;
+
 /** 获取所有文章*/
 + (void)getAllContentsWithCompleted:(networkCompletedBlock)compelted;
 

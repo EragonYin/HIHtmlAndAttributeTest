@@ -7,7 +7,8 @@
 //
 
 #import "HIShowController.h"
-#import "HIDataBase.h"
+#import "HIOperation.h"
+#import "HINetworkTool.h"
 
 @interface HIShowController ()
 
@@ -37,16 +38,16 @@
     
     self.title = @"文章展示";
     
-    NSArray *imageUrls = self.content.imageUrls;
-    NSMutableArray *images = [NSMutableArray array];
-    for (NSString *url in imageUrls) { // 此处模拟将所有图片下载到本地，或者用SDWebImage将所有图片缓存
-        [images addObject:[UIImage imageWithContentsOfFile:url]];
-    }
-    NSString *body = self.content.body;
-    
-    NSAttributedString *attributeString = [self replaceSymbolStringWithSymbol:imageSymbol string:body images:images];
-    self.textView.attributedText = attributeString;
+    // 先展示文章
+    self.textView.text = self.content.body;
     [self.view addSubview:self.textView];
+    
+    // 下载所有的网络图片
+    [self downloadImageWithImageUrls:self.content.imageUrls completed:^(NSArray<UIImage *> *images) {
+        // 图片下载完成后，替换掉标志符并展示文章
+        NSAttributedString *attributeString = [self replaceSymbolStringWithSymbol:imageSymbol string:self.content.body images:images];
+        self.textView.attributedText = attributeString;
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -124,6 +125,38 @@
     return rangeArray;
 }
 
-
+#pragma mark - network
+/** 下载所有的网络图片*/
+- (void)downloadImageWithImageUrls:(NSArray *)imageUrls completed:(void(^)(NSArray<UIImage *> *images))completed {
+    NSMutableArray *images = [NSMutableArray array];
+    
+    /**
+     * NSOperationQueue相当于一个线程池，将所需要执行的任务都添加进去
+     * queue.maxConcurrentOperationCount设置为1保证该线程池中每次只有一个任务在执行
+     * 使用自定义的 HIOperation 可以认为的控制任务的状态，保证任务是有序执行，并且是执行完成的 (NSOperation无法保证有序)
+     * 添加所有需要执行的任务后，需要自己监听判断线程池的所有任务是否已经完成(可以使用累增或累加计数方式)
+     */
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 1;
+    
+    // 循环添加上传任务进队列
+    for (NSString *url in imageUrls) { // 此处模拟将所有图片下载到本地，或者用SDWebImage将所有图片缓存
+        HIOperation *op = [HIOperation operationWithBlokc:^(HIOperation *operation) {
+            [HINetworkTool downloadImageWithImageUrl:url compelted:^(UIImage *image, int errorCode) {
+                // 存储图片
+                [images addObject:image];
+                
+                // 判断是否所有任务完成
+                if (url == imageUrls.lastObject) { // 当是最后一个完成，说明都完成了
+                    completed(images);
+                }
+                
+                // 标记当前任务完成
+                [operation finished];
+            }];
+        }];
+        [queue addOperation:op];
+    }
+}
 
 @end
